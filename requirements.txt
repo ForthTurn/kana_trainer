@@ -1,3 +1,8 @@
 rich
 InquirerPy
 matplotlib
+requests
+pydantic
+
+# develop
+ruff

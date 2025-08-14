@@ -19,3 +19,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+This project uses data from JMdict-simplified[https://github.com/scriptin/jmdict-simplified]
+The data is licensed under the Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) license.
+The original work is copyright © JMdict-simplified project authors.
+
+License requirements:
+	•	Attribution: This project acknowledges the original source and author(s) here.
+	•	ShareAlike: Any modifications or derivative works of this data in this project are released under the CC BY-SA 4.0 license as well.
+	•	Full license text: https://creativecommons.org/licenses/by-sa/4.0/

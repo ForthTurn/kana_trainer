@@ -13,6 +13,7 @@ from config import DATA_FILE
 from data_manager import load_json
 from stats_manager import show_leaderboard, show_stats
 from trainer import quiz_mode
+from JMdict.command import update_jmdict_command
 
 console = Console()
 
@@ -30,6 +31,7 @@ def main():
                 {"name": "🎯 自由练习（全部假名，按错题权重）", "value": "free"},
                 {"name": "📊 查看统计与趋势", "value": "stats"},
                 {"name": "🏆 错题排行榜", "value": "leader"},
+                {"name": "🔄 更新词典", "value": "update_jmdict"},
                 {"name": "🚪 退出", "value": "quit"},
             ],
             pointer=">",
@@ -45,6 +47,8 @@ def main():
             show_leaderboard(data)
         elif choice in ("review", "free"):
             quiz_mode(data, mode=choice)
+        elif choice == "update_jmdict":
+            update_jmdict_command()
         else:
             console.print("未知选项，请重试。")
 

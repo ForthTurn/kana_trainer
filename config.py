@@ -9,6 +9,7 @@
 # 文件路径配置
 DATA_FILE = "wrong_kana.json"
 STATS_FILE = "stats.json"
+TEMP_DIR = "/tmp"
 
 # 学习参数配置
 MAX_WEIGHT = 20  # 最大权重
@@ -23,3 +24,11 @@ DEFAULT_TOP_N = 15  # 默认排行榜显示数量
 CHART_WIDTH = 8
 CHART_HEIGHT = 4
 BAR_LENGTH = 40  # 终端条形图长度
+
+# JMdict 配置
+JMDICT_URL = "https://api.github.com/repos/scriptin/jmdict-simplified/releases/latest"  # NOQA
+PROXY = "http://127.0.0.1:7890"
+JMDICT_ZIP_PATH = "JMdict.json.zip"
+JMDICT_LOCAL_PATH = "JMdict/JMdict.json"
+JMDICT_ASSET_PREFIX = "jmdict-examples-eng"
+JMDICT_ASSET_SUFFIX = ".json.zip"

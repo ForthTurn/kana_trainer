@@ -1,0 +1,65 @@
+from pydantic import BaseModel, Field
+from typing import Optional
+from datetime import datetime
+
+
+class GithubAuthor(BaseModel):
+    login: str = Field(..., description="GitHub用户名或机器人名称")
+    id: int = Field(..., description="GitHub用户ID")
+    node_id: str = Field(..., description="GitHub节点ID")
+    avatar_url: str = Field(..., description="用户头像URL")
+    gravatar_id: str = Field(..., description="Gravatar ID")
+    url: str = Field(..., description="用户API URL")
+    html_url: str = Field(..., description="用户主页URL")
+    followers_url: str = Field(..., description="关注者列表URL")
+    following_url: str = Field(..., description="关注列表URL")
+    gists_url: str = Field(..., description="Gist列表URL")
+    starred_url: str = Field(..., description="星标仓库列表URL")
+    subscriptions_url: str = Field(..., description="订阅列表URL")
+    organizations_url: str = Field(..., description="组织列表URL")
+    repos_url: str = Field(..., description="仓库列表URL")
+    events_url: str = Field(..., description="事件列表URL")
+    received_events_url: str = Field(..., description="接收事件列表URL")
+    type: str = Field(..., description="用户类型")
+    user_view_type: str = Field(..., description="用户视图类型")
+    site_admin: bool = Field(..., description="是否为站点管理员")
+
+
+class GithubAsset(BaseModel):
+    url: str = Field(..., description="资源文件API URL")
+    id: int = Field(..., description="资源文件ID")
+    node_id: str = Field(..., description="资源文件节点ID")
+    name: str = Field(..., description="资源文件名称")
+    label: str = Field(..., description="资源文件标签")
+    uploader: GithubAuthor = Field(..., description="上传者信息")
+    content_type: str = Field(..., description="资源文件类型")
+    state: str = Field(..., description="资源文件状态")
+    size: int = Field(..., description="资源文件大小")
+    digest: str = Field(..., description="资源文件摘要")
+    download_count: int = Field(..., description="下载次数")
+    created_at: datetime = Field(..., description="创建时间")
+    updated_at: datetime = Field(..., description="更新时间")
+    browser_download_url: str = Field(..., description="浏览器下载URL")
+
+
+class GithubRelease(BaseModel):
+    url: str = Field(..., description="发布版本的API URL")
+    assets_url: str = Field(..., description="资源文件列表URL")
+    upload_url: str = Field(..., description="上传资源文件URL")
+    html_url: str = Field(..., description="发布版本主页URL")
+    id: int = Field(..., description="发布版本ID")
+    author: GithubAuthor = Field(..., description="发布作者信息")
+    node_id: str = Field(..., description="发布版本节点ID")
+    tag_name: str = Field(..., description="标签名称")
+    target_commitish: str = Field(..., description="目标提交分支")
+    name: Optional[str] = Field(None, description="发布版本名称")
+    draft: bool = Field(..., description="是否为草稿版本")
+    immutable: bool = Field(..., description="是否为不可变版本")
+    prerelease: bool = Field(..., description="是否为预发布版本")
+    created_at: datetime = Field(..., description="创建时间")
+    updated_at: datetime = Field(..., description="更新时间")
+    published_at: datetime = Field(..., description="发布时间")
+    assets: list[GithubAsset] = Field(..., description="资源文件列表")
+    tarball_url: str = Field(..., description="tarball压缩包URL")
+    zipball_url: str = Field(..., description="zip压缩包URL")
+    body: str = Field(..., description="发布版本描述")
