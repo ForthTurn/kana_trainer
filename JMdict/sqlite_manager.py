@@ -12,6 +12,8 @@ from typing import Dict, List, Optional
 
 from rich.console import Console
 
+from kana_data import kana_romaji, romaji_hiragana, romaji_katakana, special_romaji_mappings
+
 console = Console()
 
 
@@ -128,6 +130,173 @@ class JMdictSQLiteManager:
             """
 
             self.cursor.execute(query, (f"%{meaning}%", max_results))
+            words = self.cursor.fetchall()
+
+            results = []
+            for word in words:
+                word_id, kanji_text, kana_text, common = word
+                word_info = self._get_word_details(word_id)
+                results.append(word_info)
+
+            return results
+
+        except Exception as e:
+            console.print(f"[red]查询失败: {e}[/red]")
+            return []
+
+    def _kana_to_romaji(self, kana: str) -> str:
+        """使用kana_data中的映射进行假名到罗马音转换，处理特殊情况"""
+        if not kana:
+            return ""
+
+        result = ""
+        i = 0
+        while i < len(kana):
+            char = kana[i]
+
+            # 处理特殊情况
+            if char == "は" and i > 0:
+                # 在助词位置（通常是第二个字符或更后）读作wa
+                result += "wa"
+            elif char == "へ" and i > 0:
+                # 在助词位置读作e
+                result += "e"
+            elif char == "を" and i > 0:
+                # 在助词位置读作o
+                result += "o"
+            # 直接查找映射
+            elif char in kana_romaji:
+                result += kana_romaji[char]
+            # 处理小字符（如ゃ、ゅ、ょ）
+            elif i > 0 and char in ["ゃ", "ゅ", "ょ", "ャ", "ュ", "ョ"]:
+                # 替换前一个字符的最后一个字母
+                if result and result[-1] == "i":
+                    result = result[:-1] + char.replace("ゃ", "a").replace("ゅ", "u").replace("ょ", "o").replace(
+                        "ャ", "a"
+                    ).replace("ュ", "u").replace("ョ", "o")
+                else:
+                    result += char
+            # 其他字符保持原样
+            else:
+                result += char
+
+            i += 1
+
+        return result
+
+    def _romaji_to_kana(self, romaji: str) -> List[str]:
+        """使用kana_data中的映射将罗马音转换为可能的假名组合"""
+        if not romaji:
+            return []
+
+        # 生成可能的假名组合
+        possible_kanas = set()
+
+        # 处理特殊情况（助词）
+        if romaji in special_romaji_mappings:
+            possible_kanas.update(special_romaji_mappings[romaji])
+
+        # 直接匹配平假名
+        if romaji in romaji_hiragana:
+            possible_kanas.add(romaji_hiragana[romaji])
+
+        # 直接匹配片假名
+        if romaji in romaji_katakana:
+            possible_kanas.add(romaji_katakana[romaji])
+
+        # 尝试将罗马音分解为更小的部分进行匹配
+        # 例如 "nori" 可以分解为 "no" + "ri"
+        for i in range(1, len(romaji)):
+            part1 = romaji[:i]
+            part2 = romaji[i:]
+            
+            # 查找两个部分对应的假名
+            kana1_list = []
+            kana2_list = []
+            
+            if part1 in romaji_hiragana:
+                kana1_list.append(romaji_hiragana[part1])
+            if part1 in romaji_katakana:
+                kana1_list.append(romaji_katakana[part1])
+                
+            if part2 in romaji_hiragana:
+                kana2_list.append(romaji_hiragana[part2])
+            if part2 in romaji_katakana:
+                kana2_list.append(romaji_katakana[part2])
+            
+            # 组合可能的假名
+            for kana1 in kana1_list:
+                for kana2 in kana2_list:
+                    possible_kanas.add(kana1 + kana2)
+        
+        # 尝试更复杂的分解（最多3个部分）
+        if len(romaji) > 3:
+            for i in range(1, len(romaji) - 1):
+                for j in range(i + 1, len(romaji)):
+                    part1 = romaji[:i]
+                    part2 = romaji[i:j]
+                    part3 = romaji[j:]
+                    
+                    # 查找三个部分对应的假名
+                    kana1_list = []
+                    kana2_list = []
+                    kana3_list = []
+                    
+                    if part1 in romaji_hiragana:
+                        kana1_list.append(romaji_hiragana[part1])
+                    if part1 in romaji_katakana:
+                        kana1_list.append(romaji_katakana[part1])
+                        
+                    if part2 in romaji_hiragana:
+                        kana2_list.append(romaji_hiragana[part2])
+                    if part2 in romaji_katakana:
+                        kana2_list.append(romaji_katakana[part2])
+                        
+                    if part3 in romaji_hiragana:
+                        kana3_list.append(romaji_hiragana[part3])
+                    if part3 in romaji_katakana:
+                        kana3_list.append(romaji_katakana[part3])
+                    
+                    # 组合可能的假名
+                    for kana1 in kana1_list:
+                        for kana2 in kana2_list:
+                            for kana3 in kana3_list:
+                                possible_kanas.add(kana1 + kana2 + kana3)
+
+        return list(possible_kanas)
+
+    def search_by_romaji(self, romaji: str, max_results: int = 5) -> List[Dict]:
+        """根据罗马音搜索词汇（优化版本）"""
+        if not self.conn:
+            console.print("[red]请先连接数据库[/red]")
+            return []
+
+        try:
+            # 将罗马音转换为可能的假名组合
+            possible_kanas = self._romaji_to_kana(romaji.lower())
+
+            if not possible_kanas:
+                return []
+
+            # 构建SQL查询条件
+            conditions = []
+            params = []
+
+            for kana in possible_kanas:
+                conditions.append("w.kana LIKE ?")
+                params.append(f"%{kana}%")
+
+            # 使用OR条件查询包含任何匹配假名的词汇
+            query = f"""
+                SELECT DISTINCT w.id, w.kanji, w.kana, w.common
+                FROM words w
+                WHERE {" OR ".join(conditions)}
+                ORDER BY w.common DESC, w.id
+                LIMIT ?
+            """
+
+            params.append(max_results)
+            self.cursor.execute(query, params)
             words = self.cursor.fetchall()
 
             results = []

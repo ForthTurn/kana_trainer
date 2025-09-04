@@ -15,7 +15,7 @@ from rich.text import Text
 
 from config import DATA_FILE
 from data_manager import load_json
-from JMdict.command import update_jmdict_command
+from JMdict.command import search_word_command, update_jmdict_command
 from stats_manager import show_leaderboard, show_stats
 from trainer import quiz_mode
 
@@ -48,6 +48,7 @@ def main():
             choices=[
                 {"name": "📅 每日复习（优先出到期题）", "value": "review"},
                 {"name": "🎯 自由练习（全部假名，按错题权重）", "value": "free"},
+                {"name": "📖 查词功能", "value": "search"},
                 {"name": "📊 查看统计与趋势", "value": "stats"},
                 {"name": "🏆 错题排行榜", "value": "leader"},
                 {"name": "🔄 更新词典", "value": "update_jmdict"},
@@ -75,6 +76,11 @@ def main():
             clear_screen()
             show_header()
             quiz_mode(data, mode=choice)
+            input("\n按 Enter 键返回主菜单...")
+        elif choice == "search":
+            clear_screen()
+            show_header()
+            search_word_command()
             input("\n按 Enter 键返回主菜单...")
         elif choice == "update_jmdict":
             clear_screen()

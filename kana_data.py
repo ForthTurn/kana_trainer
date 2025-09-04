@@ -33,7 +33,7 @@ kana_romaji = {
     "ぬ": "nu",
     "ね": "ne",
     "の": "no",
-    "は": "ha",
+    "は": "ha",  # 通常读作ha，但在助词中读作wa
     "ひ": "hi",
     "ふ": "fu",
     "へ": "he",
@@ -100,4 +100,169 @@ kana_romaji = {
     "ワ": "wa",
     "ヲ": "wo",
     "ン": "n",
+    # 浊音
+    "が": "ga",
+    "ぎ": "gi",
+    "ぐ": "gu",
+    "げ": "ge",
+    "ご": "go",
+    "ざ": "za",
+    "じ": "ji",
+    "ず": "zu",
+    "ぜ": "ze",
+    "ぞ": "zo",
+    "だ": "da",
+    "ぢ": "di",
+    "づ": "du",
+    "で": "de",
+    "ど": "do",
+    "ば": "ba",
+    "び": "bi",
+    "ぶ": "bu",
+    "べ": "be",
+    "ぼ": "bo",
+    "ぱ": "pa",
+    "ぴ": "pi",
+    "ぷ": "pu",
+    "ぺ": "pe",
+    "ぽ": "po",
+    "ガ": "ga",
+    "ギ": "gi",
+    "グ": "gu",
+    "ゲ": "ge",
+    "ゴ": "go",
+    "ザ": "za",
+    "ジ": "ji",
+    "ズ": "zu",
+    "ゼ": "ze",
+    "ゾ": "zo",
+    "ダ": "da",
+    "ヂ": "di",
+    "ヅ": "du",
+    "デ": "de",
+    "ド": "do",
+    "バ": "ba",
+    "ビ": "bi",
+    "ブ": "bu",
+    "ベ": "be",
+    "ボ": "bo",
+    "パ": "pa",
+    "ピ": "pi",
+    "プ": "pu",
+    "ペ": "pe",
+    "ポ": "po",
+    # 拗音
+    "きゃ": "kya",
+    "きゅ": "kyu",
+    "きょ": "kyo",
+    "ぎゃ": "gya",
+    "ぎゅ": "gyu",
+    "ぎょ": "gyo",
+    "しゃ": "sha",
+    "しゅ": "shu",
+    "しょ": "sho",
+    "じゃ": "ja",
+    "じゅ": "ju",
+    "じょ": "jo",
+    "ちゃ": "cha",
+    "ちゅ": "chu",
+    "ちょ": "cho",
+    "にゃ": "nya",
+    "にゅ": "nyu",
+    "にょ": "nyo",
+    "ひゃ": "hya",
+    "ひゅ": "hyu",
+    "ひょ": "hyo",
+    "びゃ": "bya",
+    "びゅ": "byu",
+    "びょ": "byo",
+    "ぴゃ": "pya",
+    "ぴゅ": "pyu",
+    "ぴょ": "pyo",
+    "みゃ": "mya",
+    "みゅ": "myu",
+    "みょ": "myo",
+    "りゃ": "rya",
+    "りゅ": "ryu",
+    "りょ": "ryo",
+    "キャ": "kya",
+    "キュ": "kyu",
+    "キョ": "kyo",
+    "ギャ": "gya",
+    "ギュ": "gyu",
+    "ギョ": "gyo",
+    "シャ": "sha",
+    "シュ": "shu",
+    "ショ": "sho",
+    "ジャ": "ja",
+    "ジュ": "ju",
+    "ジョ": "jo",
+    "チャ": "cha",
+    "チュ": "chu",
+    "チョ": "cho",
+    "ニャ": "nya",
+    "ニュ": "nyu",
+    "ニョ": "nyo",
+    "ヒャ": "hya",
+    "ヒュ": "hyu",
+    "ヒョ": "hyo",
+    "ビャ": "bya",
+    "ビュ": "byu",
+    "ビョ": "byo",
+    "ピャ": "pya",
+    "ピュ": "pyu",
+    "ピョ": "pyo",
+    "ミャ": "mya",
+    "ミュ": "myu",
+    "ミョ": "myo",
+    "リャ": "rya",
+    "リュ": "ryu",
+    "リョ": "ryo",
+    # 小字符
+    "っ": "tsu",
+    "ッ": "tsu",
+    "ゃ": "ya",
+    "ゅ": "yu",
+    "ょ": "yo",
+    "ャ": "ya",
+    "ュ": "yu",
+    "ョ": "yo",
+    # 添加一些常用的罗马音组合
+    "かた": "kata", "かな": "kana", "ひら": "hira", "にほん": "nihon", "ご": "go",
+    "カタ": "kata", "カナ": "kana", "ヒラ": "hira", "ニホン": "nihon", "ゴ": "go",
+    "こんにちは": "konnichiwa", "ありがとう": "arigatou", "さようなら": "sayounara",
+    "おはよう": "ohayou", "こんばんは": "konbanwa", "おやすみ": "oyasumi",
+    "いただきます": "itadakimasu", "ごちそうさま": "gochisousama",
 }
+
+# 罗马音到假名的反向映射
+romaji_kana = {v: k for k, v in kana_romaji.items()}
+
+# 罗马音到平假名的映射
+romaji_hiragana = {}
+# 罗马音到片假名的映射  
+romaji_katakana = {}
+
+# 特殊情况：助词的罗马音映射
+special_romaji_mappings = {
+    'wa': ['は'],  # 助词は读作wa
+    'e': ['へ'],   # 助词へ读作e  
+    'o': ['を'],   # 助词を读作o
+}
+
+# 分别构建平假名和片假名的映射
+for kana, romaji in kana_romaji.items():
+    if romaji not in romaji_hiragana and romaji not in romaji_katakana:
+        # 优先使用平假名
+        if ord(kana[0]) >= 0x3040 and ord(kana[0]) <= 0x309F:  # 平假名范围
+            romaji_hiragana[romaji] = kana
+        elif ord(kana[0]) >= 0x30A0 and ord(kana[0]) <= 0x30FF:  # 片假名范围
+            romaji_katakana[romaji] = kana
+    elif romaji in romaji_hiragana and ord(kana[0]) >= 0x30A0 and ord(kana[0]) <= 0x30FF:
+        # 如果已有平假名，添加片假名作为备选
+        if romaji not in romaji_katakana:
+            romaji_katakana[romaji] = kana
+    elif romaji in romaji_katakana and ord(kana[0]) >= 0x3040 and ord(kana[0]) <= 0x309F:
+        # 如果已有片假名，添加平假名作为备选
+        if romaji not in romaji_hiragana:
+            romaji_hiragana[romaji] = kana
