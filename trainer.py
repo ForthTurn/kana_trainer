@@ -84,7 +84,7 @@ def show_kana_example(kana):
             word_panel = Panel(word_text, border_style="blue", padding=(1, 2))
             console.print(word_panel)
             console.print()
-    except Exception as e:
+    except Exception:
         # 如果出错，静默处理，不影响主要练习流程
         pass
 
