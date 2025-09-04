@@ -46,13 +46,13 @@ class JMdictSQLiteManager:
             console.print("[green]✓ 数据库连接已断开[/green]")
 
     def find_words_with_kana(self, kana: str, max_results: int = 5) -> List[Dict]:
-        """查找包含指定假名的词汇"""
+        """查找包含指定假名的词汇，优先返回常用词"""
         if not self.conn:
             console.print("[red]请先连接数据库[/red]")
             return []
 
         try:
-            # 使用LIKE操作符查找包含指定假名的词汇
+            # 优先查找常用词，然后查找其他词汇
             query = """
                 SELECT DISTINCT w.id, w.kanji, w.kana, w.common
                 FROM words w
@@ -77,11 +77,18 @@ class JMdictSQLiteManager:
             return []
 
     def get_random_word_with_kana(self, kana: str) -> Optional[Dict]:
-        """随机获取一个包含指定假名的词汇"""
+        """随机获取一个包含指定假名的词汇，优先选择常用词"""
         words = self.find_words_with_kana(kana, max_results=10)
-        if words:
-            return random.choice(words)
-        return None
+        if not words:
+            return None
+
+        # 优先选择常用词
+        common_words = [word for word in words if word.get("common", False)]
+        if common_words:
+            return random.choice(common_words)
+
+        # 如果没有常用词，则随机选择一个
+        return random.choice(words)
 
     def search_by_kanji(self, kanji: str, max_results: int = 5) -> List[Dict]:
         """根据汉字搜索词汇"""
@@ -209,26 +216,26 @@ class JMdictSQLiteManager:
         for i in range(1, len(romaji)):
             part1 = romaji[:i]
             part2 = romaji[i:]
-            
+
             # 查找两个部分对应的假名
             kana1_list = []
             kana2_list = []
-            
+
             if part1 in romaji_hiragana:
                 kana1_list.append(romaji_hiragana[part1])
             if part1 in romaji_katakana:
                 kana1_list.append(romaji_katakana[part1])
-                
+
             if part2 in romaji_hiragana:
                 kana2_list.append(romaji_hiragana[part2])
             if part2 in romaji_katakana:
                 kana2_list.append(romaji_katakana[part2])
-            
+
             # 组合可能的假名
             for kana1 in kana1_list:
                 for kana2 in kana2_list:
                     possible_kanas.add(kana1 + kana2)
-        
+
         # 尝试更复杂的分解（最多3个部分）
         if len(romaji) > 3:
             for i in range(1, len(romaji) - 1):
@@ -236,27 +243,27 @@ class JMdictSQLiteManager:
                     part1 = romaji[:i]
                     part2 = romaji[i:j]
                     part3 = romaji[j:]
-                    
+
                     # 查找三个部分对应的假名
                     kana1_list = []
                     kana2_list = []
                     kana3_list = []
-                    
+
                     if part1 in romaji_hiragana:
                         kana1_list.append(romaji_hiragana[part1])
                     if part1 in romaji_katakana:
                         kana1_list.append(romaji_katakana[part1])
-                        
+
                     if part2 in romaji_hiragana:
                         kana2_list.append(romaji_hiragana[part2])
                     if part2 in romaji_katakana:
                         kana2_list.append(romaji_katakana[part2])
-                        
+
                     if part3 in romaji_hiragana:
                         kana3_list.append(romaji_hiragana[part3])
                     if part3 in romaji_katakana:
                         kana3_list.append(romaji_katakana[part3])
-                    
+
                     # 组合可能的假名
                     for kana1 in kana1_list:
                         for kana2 in kana2_list:
