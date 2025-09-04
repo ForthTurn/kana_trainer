@@ -7,6 +7,7 @@
 """
 
 import os
+
 from InquirerPy import inquirer
 from rich.console import Console
 from rich.panel import Panel
@@ -14,9 +15,9 @@ from rich.text import Text
 
 from config import DATA_FILE
 from data_manager import load_json
+from JMdict.command import update_jmdict_command
 from stats_manager import show_leaderboard, show_stats
 from trainer import quiz_mode
-from JMdict.command import update_jmdict_command
 
 console = Console()
 

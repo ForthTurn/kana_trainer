@@ -1,21 +1,23 @@
 import os
 import zipfile
+
 import requests
 from rich.console import Console
 from rich.panel import Panel
-from rich.text import Text
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from .schema import GithubRelease
+from rich.text import Text
 
 from config import (
-    JMDICT_URL,
-    PROXY,
-    TEMP_DIR,
-    JMDICT_LOCAL_PATH,
     JMDICT_ASSET_PREFIX,
     JMDICT_ASSET_SUFFIX,
+    JMDICT_LOCAL_PATH,
+    JMDICT_URL,
     JMDICT_ZIP_PATH,
+    PROXY,
+    TEMP_DIR,
 )
+
+from .schema import GithubRelease
 
 console = Console()
 

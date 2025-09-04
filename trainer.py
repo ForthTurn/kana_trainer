@@ -7,15 +7,16 @@
 """
 
 import os
+
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
 from config import DATA_FILE, INTERVAL_MULTIPLIER, MAX_INTERVAL
 from data_manager import due_for_review, pick_kana, save_json, today_str
+from jmdict_manager import JMdictManager
 from kana_data import kana_romaji
 from stats_manager import update_stats
-from jmdict_manager import JMdictManager
 
 console = Console()
 

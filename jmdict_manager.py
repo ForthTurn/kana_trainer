@@ -9,7 +9,7 @@ JMdict词典管理器
 import json
 import os
 import random
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 
 class JMdictManager:
